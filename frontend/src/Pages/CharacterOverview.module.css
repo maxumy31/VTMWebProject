@@ -1,0 +1,14 @@
+
+.character_columns
+{
+    width: 40%;
+
+    display: grid;
+    grid-template-columns: auto;
+    column-gap: 10px;
+    row-gap: 10px;
+    margin-left: 10px;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 30px;
+}

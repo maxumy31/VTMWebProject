@@ -1,0 +1,43 @@
+.wrap
+{
+    display: grid;
+    grid-template-columns: auto auto;
+    width: 30%;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+}
+
+.header
+{
+    text-align: center;
+}
+
+.user_input
+{
+    width: 80%;
+    height: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.background
+{
+    background-image: url(https://pics.craiyon.com/2024-09-18/kF1_J7KNREORNAlMssRoqQ.webp);
+    background-attachment: fixed;
+}
+
+.buttons
+{
+    width: 40%;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 40%;
+    margin-top: 10px;
+}
+
+.buttons_div
+{
+    height: 100px;
+}

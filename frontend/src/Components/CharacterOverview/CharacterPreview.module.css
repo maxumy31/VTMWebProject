@@ -1,0 +1,19 @@
+.wrap
+{
+    border: 1px solid black;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    height: 150px;
+}
+
+.button
+{
+    height: 30px;
+    width: 150px;
+
+}
+
+.wrap>h4
+{
+    text-align: left;
+}
