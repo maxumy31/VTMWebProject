@@ -15,3 +15,4 @@ F:\VTMSite\Repository\obj\Debug\net8.0\Repository.pdb
 F:\VTMSite\Repository\obj\Debug\net8.0\ref\Repository.dll
 F:\VTMSite\Repository\bin\Debug\net8.0\Repository.runtimeconfig.json
 F:\VTMSite\Repository\obj\Debug\net8.0\Repository.genruntimeconfig.cache
+F:\VTMSite\Repository\obj\Debug\net8.0\Repository.sourcelink.json

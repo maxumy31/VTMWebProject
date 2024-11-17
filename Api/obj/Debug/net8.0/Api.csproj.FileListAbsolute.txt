@@ -142,3 +142,4 @@ F:\VTMSite\Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptogr
 F:\VTMSite\Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 F:\VTMSite\Api\bin\Debug\net8.0\Repository.dll
 F:\VTMSite\Api\bin\Debug\net8.0\Repository.pdb
+F:\VTMSite\Api\obj\Debug\net8.0\Api.sourcelink.json

@@ -19,8 +19,6 @@ public class User
     [MaxLength(20)]
     public string? Password{get;set;}
 
-    public Guid Role{get;set;}
-
     public ICollection<Character>? Characters{get;set;}
 
     public User(){}
