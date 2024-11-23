@@ -1,8 +1,8 @@
-import CharacterPage from "../../Pages/CharacterPage";
+
 import styles from "./CharacterPreview.module.css";
 
 export default function CharacterPreview({ character_data ,loadNextPage}) {
-    character_data = character_data || [["Attr1", "Value1"], ["Attr2", "Value2"]];
+    character_data = character_data || [["Имя", "Дракула"], ["Поколение", "4"]];
     console.log(character_data);
 
     // Convert data into an array of <h4> elements with "key:value" format.
@@ -17,8 +17,8 @@ export default function CharacterPreview({ character_data ,loadNextPage}) {
     return (
         <div className={styles.wrap}>
             {data_to_h(character_data)}
-            <button className={styles.button} onClick = {() => loadNextPage("character")}>Open</button>
-            <button className={styles.button}>Delete</button>
+            <button className={styles.button} onClick = {() => loadNextPage("character")}>Открыть персонажа</button>
+            <button className={styles.button}>Удалить персонажа</button>
         
         </div>
     );

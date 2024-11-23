@@ -1,18 +1,22 @@
 import React, { useState } from "react";
-import empty_dot from "./../../Images/dots/empty_dot.png";
-import full_dot from "./../../Images/dots/full_dot.png";
+import standart_empty_dot from "./../../Images/dots/empty_dot.png";
+import standart_full_dot from "./../../Images/dots/full_dot.png";
 import styles from "./DotsLine.module.css"
-export default function DotsLine({ dotCount, valueRef ,minValue,dotsPerRow,initialValue}) 
+export default function DotsLine({ dotCount, valueRef ,minValue,dotsPerRow,initialValue, full_dot,empty_dot}) 
 {
     const [dots, setDots] = useState(Array(dotCount || 8).fill(false));
+
     dotsPerRow = 10 || dotsPerRow
     initialValue = 0 || initialValue
     minValue = minValue || 0
+    empty_dot = empty_dot || standart_empty_dot
+    full_dot = full_dot || standart_full_dot
+
     function generateDots() 
     {
         let res = dots.map((isFull, index) => 
         (
-            <span className={styles.img_out}>
+            <span className={styles.img_out} key = {index}>
             <img
             className={styles.dotImage}
             key={index}

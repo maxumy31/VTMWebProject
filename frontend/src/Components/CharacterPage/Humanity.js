@@ -1,11 +1,12 @@
 import DotsLine from "./DotsLine";
+import styles from "./Humanity.module.css"
 
 export default function Humanity()
 {
     return(
         <>
-        <h4>Humanity/path</h4>
-        <input placeholder="Path" value="Humanity"/>
+        <h4>Путь</h4>
+        <input className={styles.width} placeholder="Path" value="Человечность" onChange={() => console.log("123")}/>
         <DotsLine dotCount={10}/>
         </>
     )

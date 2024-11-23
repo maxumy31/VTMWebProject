@@ -1,6 +1,6 @@
-import empty_dot from "./../../Images/dots/empty_dot.png"
-import full_dot from "./../../Images/dots/full_dot.png"
+
 import DotsLine from "./DotsLine"
+import styles from "./InputColumn.module.css"
 
 export default function InputColumn({columnName,rowsCount})
 {
@@ -10,7 +10,7 @@ export default function InputColumn({columnName,rowsCount})
     function RenderRows()
     {
       let i = 0
-      return Array.from({ length: 8 }).map(x => <p key = {i++}><input/><DotsLine dotCount={8} valueRef={123}/></p>);
+      return Array.from({ length: 8 }).map(x => <div key = {i++}><input className={styles.input}/><DotsLine dotCount={8} valueRef={123}/></div>);
     };
     return(
         <>

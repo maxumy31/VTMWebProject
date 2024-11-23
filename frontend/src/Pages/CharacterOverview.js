@@ -7,8 +7,6 @@ export default function CharacterOverview({loadNextPage})
     return(
         <div className={styles.character_columns}>
             <CharacterPreview loadNextPage = {loadNextPage}/>
-            <CharacterPreview loadNextPage = {loadNextPage}/>
-            <CharacterPreview loadNextPage = {loadNextPage}/>
             <CreateNewCharacter loadNextPage = {loadNextPage}/>
         </div>
     )
