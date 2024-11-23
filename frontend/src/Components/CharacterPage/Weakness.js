@@ -2,7 +2,7 @@ export default function Weakness()
 {
     return(
         <>
-        <h4>Weakness</h4>
+        <h4>Слабость</h4>
         <input/>
         </>
     )

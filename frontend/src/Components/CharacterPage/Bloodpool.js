@@ -4,7 +4,7 @@ export default function Bloodpool()
 {
     return(
         <div className={styles.wrap}>
-        <h4>Bloodpool</h4>
+        <h4>Запас крови</h4>
         <DotsLine dotCount={10}/>
         <DotsLine dotCount={10}/>
         <DotsLine dotCount={10}/>

@@ -1,6 +1,5 @@
 
 import Bloodpool from "../Components/CharacterPage/Bloodpool";
-import DotsLine from "../Components/CharacterPage/DotsLine";
 import Experience from "../Components/CharacterPage/Experience";
 import Health from "../Components/CharacterPage/Health";
 import Humanity from "../Components/CharacterPage/Humanity";
@@ -18,69 +17,75 @@ export default function CharacterPage()
         <div className={styles.wrap}>
             <div className={styles.three_center_columns}>
                 <div className={styles.column_description}>
-                    <TextInfoField PlaceholderText={"Name "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Chronicle "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Sire "}></TextInfoField>
+                    <TextInfoField PlaceholderText={"Имя "}></TextInfoField>
+                    <TextInfoField PlaceholderText={"Игрок "}></TextInfoField>
+                    <TextInfoField PlaceholderText={"Хроника "}></TextInfoField>
                 </div>
                 <div className={styles.column_description}>
-                    <TextInfoField PlaceholderText={"Concept "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Ambition "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Desire "}></TextInfoField>
+                    <TextInfoField PlaceholderText={"Натура "}></TextInfoField>
+                    <TextInfoField PlaceholderText={"Маска "}></TextInfoField>
+                    <TextInfoField PlaceholderText={"Клан "}></TextInfoField>
                 </div>
                 <div className={styles.column_description}>
-                    <TextInfoField PlaceholderText={"Predator "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Clan "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Generation "}></TextInfoField>
+                    <TextInfoField PlaceholderText={"Поколение "}></TextInfoField>
+                    <TextInfoField PlaceholderText={"Убежище "}></TextInfoField>
+                    <TextInfoField PlaceholderText={"Конецпт "}></TextInfoField>
                 </div>
             </div>
             <div>
-                <h2 className = {styles.header}>Attributes</h2>
-                <hr size = "5" noshade = "true"></hr>
+                <hr size = "3" noshade = "true"></hr>
+                <h2 className = {styles.header}>Атрибуты</h2>
+                <hr size = "3" noshade = "true"></hr>
             </div>
             
             <div className={styles.three_center_columns}>
                 
                 <div>
-                    <StatsColumn statsList={["Strength","Agility","Stamina"]} columnName={"Physical"}/>
+                    <StatsColumn statsList={["Сила","Ловкость","Выносливость"]} columnName={"Физические"}/>
                 </div>
                 <div>
-                    <StatsColumn statsList={["Charisma","Manipulation","Appearance"]} columnName={"Social"}/>
+                    <StatsColumn statsList={["Харизма","Манипуляции","Внешность"]} columnName={"Социальные"}/>
                 </div>
                 <div>
-                    <StatsColumn statsList={["Intelligence","Wits","Resolve"]} columnName={"Mental"}/>
+                    <StatsColumn statsList={["Восприятие","Интеллект","Смекалка"]} columnName={"Ментальные"}/>
                 </div>
             </div>
 
             <div>
-                <h2 className = {styles.header}>Skills</h2>
-                <hr size = "5" noshade = "true"></hr>
+                <hr size = "3" noshade = "true"></hr>
+                <h2 className = {styles.header}>Способности</h2>
+                <hr size = "3" noshade = "true"></hr>
             </div>
             
             <div className={styles.three_center_columns}>
                 
                 <div>
-                    <StatsColumn statsList={["Alertness","Athletics","Brawl","Dodge","Empathy","Expression","Intimidation","Leadership","Streetwise","Subterfuge"]} columnName={"Talents"}/>
+                    <StatsColumn statsList={["Атлетика","Внимательность","Запугивание","Знание улиц","Лидерство","Рукопашный бой",
+                        "Уклонение","Хитрость","Экспрессия","Эмпатия"]} columnName={"Таланты"}/>
                 </div>
                 <div>
-                    <StatsColumn statsList={["Animal Ken","Crafts","Drive","Etiquette","Firearms","Melee","Performance","Security","Stealth","Survival"]} columnName={"Skills"}/>
+                    <StatsColumn statsList={["Безопасность","Вождение","Выживание","Исполнение","Знание животных","Ремесла",
+                        "Скрытность","Стрельба","Фехтование","Этикет"]} columnName={"Навыки"}/>
                 </div>
                 <div>
-                    <StatsColumn statsList={["Academics","Computer","Finance","Investigation","Law","Linguistics","Medicine","Occult","Politics","Science"]} columnName={"Knowledges"}/>
+                    <StatsColumn statsList={["Академические","Законы","Компьютеры","Лингвистика","Медицина","Научные","Оккультизм",
+                        "Политика","Расследование","Финансы"]} columnName={"Знания"}/>
                 </div>
             </div>
 
             <div>
-                <h2 className = {styles.header}>Advantages</h2>
-                <hr size = "5" noshade = "true"></hr>
+                <hr size = "3" noshade = "true"></hr>
+                <h2 className = {styles.header}>Преимущества</h2>
+                <hr size = "3" noshade = "true"></hr>
             </div>
 
             <div className={styles.three_center_columns}>
                 
                 <div>
-                    <InputColumn columnName={"Backgrounds"} rowsCount={6}/>
+                    <InputColumn columnName={"Дополнения"} rowsCount={6}/>
                 </div>
                 <div>
-                <InputColumn columnName={"Disciplines"} rowsCount={6}/>
+                <InputColumn columnName={"Дисциплины"} rowsCount={6}/>
                 </div>
                 <div>
                     <Virtues/>
@@ -88,14 +93,15 @@ export default function CharacterPage()
             </div>
 
             <div>
-                <h2 className = {styles.header}></h2>
-                <hr size = "5" noshade = "true"></hr>
+                <hr size = "3" noshade = "true"></hr>
+                <h2 className = {styles.header}>Прочее</h2>
+                <hr size = "3" noshade = "true"></hr>
             </div>
 
             <div className={styles.three_center_columns}>
                 
                 <div>
-                    <InputColumn columnName={"Other traits"} rowsCount={12}/>
+                    <InputColumn columnName={"Остальные черты"} rowsCount={12}/>
                 </div>
                 <div>
                     <div>

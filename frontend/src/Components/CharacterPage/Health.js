@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 
+import aggravated_damage from "./../../Images/damage/aggravated_damage.png";
+import lethal_damage from "./../../Images/damage/lethal_damage.png";
+import blunt_damage from "./../../Images/damage/blunt_damage.png";
+
+import full_health from "./../../Images/damage/empty_square.png";
+
+
+
+
 export default function Health()
 {
-    const [health,setHealth] = useState(Array(7).fill(0))
-    const images = ["https://img.freepik.com/premium-vector/pattern-cat-pixels-can-be-used-everything-clothes-stationery-covers-cases-pastels-b_657328-49.jpg?w=360","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTlFZKzD21LY9hEnutex7gD7W88kL_mdQ1OA&s","https://i.pinimg.com/564x/31/f1/58/31f158ec97d4d205c6d374b8d2521caa.jpg","https://www.shutterstock.com/image-vector/this-cat-pixel-art-colorful-260nw-2308028649.jpg"]
+    const [health,setHealth] = useState(Array(8).fill(0))
+    const images = [full_health,blunt_damage,lethal_damage,aggravated_damage]
     let toggleHelth = function(dot) {
         let state = health[dot]
         let newState = 0
@@ -22,20 +31,23 @@ export default function Health()
             case 3:
                 newState = 0;
                 break; 
+            default:
+                newState = 0;
+                break;
         }
         newStates[dot] = newState
         setHealth(newStates)
-
     }
+
+    const healthConditions = ["Задет","Поврежден(-1)","Ранен(-1)","Тяжело ранен(-2)","Травмирован(-2)","Искалечен(-5)","Обездвижен(торпор)"]
+
+    
+
     return(
         <>
-        <h4>Health</h4>
-        <p> <img src = {images[health[0]]} onClick={() => toggleHelth(0)} width = "80px"/>Bruised</p>
-        <p> <img src = {images[health[1]]} onClick={() => toggleHelth(1)} width = "80px"/>Hurt</p>
-        <p> <img src = {images[health[2]]} onClick={() => toggleHelth(2)} width = "80px"/>Wounde</p>
-        <p> <img src = {images[health[3]]} onClick={() => toggleHelth(3)} width = "80px"/>Mauled</p>
-        <p> <img src = {images[health[4]]} onClick={() => toggleHelth(4)} width = "80px"/>Crippled</p>
-        <p> <img src = {images[health[5]]} onClick={() => toggleHelth(5)} width = "80px"/>Incapacitated</p>
+        <h4>Здоровье</h4>
+        {healthConditions.map( (v,id) => <p key = {id}><img src = {images[health[id]]} alt = {"Картинка не найдена"} onClick={() => toggleHelth(id)} width = "30px" />{v}</p>)}
+ 
         </>
     )
 }

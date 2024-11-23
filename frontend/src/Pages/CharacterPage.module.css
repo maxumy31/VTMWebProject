@@ -6,11 +6,6 @@
     margin-right: auto;
 }
 
-.background
-{
-    /*background-image: url(https://pics.craiyon.com/2024-09-18/kF1_J7KNREORNAlMssRoqQ.webp);
-    background-attachment: fixed;*/
-}
 
 .three_center_columns
 {
@@ -30,13 +25,21 @@
 
 .column_description * input:hover
 {
-    background-color:cornflowerblue;
+    background-color:antiquewhite;
 }
 
 
 .column_description>*
 {
     margin-top: 40px;
+
+}
+
+.column_description * input
+{
+    width: 250px;
+    height: 20px;
+    font-size: large;
 }
 
 .header
