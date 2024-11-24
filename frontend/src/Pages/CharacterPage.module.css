@@ -17,17 +17,25 @@
     row-gap: 10px;
 }
 
+.three_center_columns * input:hover
+{
+    background-color:antiquewhite;
+}
+
+.return_button
+{
+    width: 100px;
+    height: 30px;
+
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
 .column_description
 {
     margin-left: auto;
     margin-right: auto;
 }
-
-.column_description * input:hover
-{
-    background-color:antiquewhite;
-}
-
 
 .column_description>*
 {

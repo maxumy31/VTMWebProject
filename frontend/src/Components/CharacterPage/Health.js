@@ -7,8 +7,6 @@ import blunt_damage from "./../../Images/damage/blunt_damage.png";
 import full_health from "./../../Images/damage/empty_square.png";
 
 
-
-
 export default function Health({onValueChange})
 {
     const [health,setHealth] = useState(Array(8).fill(0))

@@ -10,7 +10,7 @@ import Virtues from "../Components/CharacterPage/Virtues";
 import Weakness from "../Components/CharacterPage/Weakness";
 import Willpower from "../Components/CharacterPage/Willpower";
 import styles from "./CharacterPage.module.css";
-export default function CharacterPage()
+export default function CharacterPage({loadNextPage})
 {
     let characters_stats = {}
 
@@ -20,7 +20,9 @@ export default function CharacterPage()
     }
     
     return(
+        
         <div className={styles.background}>
+        <div><button className={styles.return_button} onClick={ () => loadNextPage("character_overview")}>Назад</button></div>
         <div className={styles.wrap}>
             <div className={styles.three_center_columns}>
                 {[["Имя ","Игрок ", "Хроника "],["Натура ","Маска ", "Клан "],["Поколение ","Убежище ", "Конецпт "]].map((v,i) =>

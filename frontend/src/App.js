@@ -9,7 +9,7 @@ export default function App(){
     const pageComponents = {
         "auth": <AuthPage loadNextPage={setCurrentPage}/>,
         "character_overview": <CharacterOverview loadNextPage={setCurrentPage}/>,
-        "character": <CharacterPage/>
+        "character": <CharacterPage loadNextPage={setCurrentPage}/>
     }
 
 

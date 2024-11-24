@@ -12,3 +12,22 @@
     margin-right: 30%;
     margin-top: 30px;
 }
+
+.character_columns * button:hover
+{
+    background-color: antiquewhite;
+}
+
+.return_button
+{
+    width: 100px;
+    height: 30px;
+
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.return_button:hover
+{
+    background-color: antiquewhite;
+}
