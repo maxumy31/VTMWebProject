@@ -12,25 +12,24 @@ import Willpower from "../Components/CharacterPage/Willpower";
 import styles from "./CharacterPage.module.css";
 export default function CharacterPage()
 {
+    let characters_stats = {}
+
+    function onStatChange(name,newValue) {
+        characters_stats[name] = newValue
+        console.log(characters_stats)
+    }
+    
     return(
         <div className={styles.background}>
         <div className={styles.wrap}>
             <div className={styles.three_center_columns}>
-                <div className={styles.column_description}>
-                    <TextInfoField PlaceholderText={"Имя "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Игрок "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Хроника "}></TextInfoField>
-                </div>
-                <div className={styles.column_description}>
-                    <TextInfoField PlaceholderText={"Натура "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Маска "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Клан "}></TextInfoField>
-                </div>
-                <div className={styles.column_description}>
-                    <TextInfoField PlaceholderText={"Поколение "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Убежище "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Конецпт "}></TextInfoField>
-                </div>
+                {[["Имя ","Игрок ", "Хроника "],["Натура ","Маска ", "Клан "],["Поколение ","Убежище ", "Конецпт "]].map((v,i) =>
+                    <div key = {i} className={styles.column_description}>
+                        {
+                            v.map((vv,vi) => 
+                            <TextInfoField key = {vi} onValueChange = {onStatChange} placeholderText={vv}/>)
+                        }
+                    </div>)}
             </div>
             <div>
                 <hr size = "3" noshade = "true"></hr>
@@ -39,16 +38,16 @@ export default function CharacterPage()
             </div>
             
             <div className={styles.three_center_columns}>
-                
-                <div>
-                    <StatsColumn statsList={["Сила","Ловкость","Выносливость"]} columnName={"Физические"}/>
-                </div>
-                <div>
-                    <StatsColumn statsList={["Харизма","Манипуляции","Внешность"]} columnName={"Социальные"}/>
-                </div>
-                <div>
-                    <StatsColumn statsList={["Восприятие","Интеллект","Смекалка"]} columnName={"Ментальные"}/>
-                </div>
+                {
+                    Object.entries({
+                        "Физические":["Сила","Ловкость","Выносливость"],
+                        "Социальные":["Харизма","Манипуляции","Внешность"],
+                        "Ментальные":["Восприятие","Интеллект","Смекалка"]
+                    }).map(([k,v],i) => 
+                    <div key = {i}>
+                        <StatsColumn statsList={v} columnName={k} onValueChange={onStatChange}/>
+                    </div>)
+                }
             </div>
 
             <div>
@@ -58,19 +57,20 @@ export default function CharacterPage()
             </div>
             
             <div className={styles.three_center_columns}>
+                {
+                    Object.entries({
+                        "Таланты":["Атлетика","Внимательность","Запугивание","Знание улиц","Лидерство","Рукопашный бой",
+                            "Уклонение","Хитрость","Экспрессия","Эмпатия"],
+                        "Навыки":["Безопасность","Вождение","Выживание","Исполнение","Знание животных","Ремесла",
+                            "Скрытность","Стрельба","Фехтование","Этикет"],
+                        "Знания":["Академические","Законы","Компьютеры","Лингвистика","Медицина","Научные","Оккультизм",
+                            "Политика","Расследование","Финансы"]
+                    }).map(([k,v],i) => 
+                    <div key = {i}>
+                        <StatsColumn statsList={v} columnName={k} onValueChange={onStatChange}/>
+                    </div>)
+                }
                 
-                <div>
-                    <StatsColumn statsList={["Атлетика","Внимательность","Запугивание","Знание улиц","Лидерство","Рукопашный бой",
-                        "Уклонение","Хитрость","Экспрессия","Эмпатия"]} columnName={"Таланты"}/>
-                </div>
-                <div>
-                    <StatsColumn statsList={["Безопасность","Вождение","Выживание","Исполнение","Знание животных","Ремесла",
-                        "Скрытность","Стрельба","Фехтование","Этикет"]} columnName={"Навыки"}/>
-                </div>
-                <div>
-                    <StatsColumn statsList={["Академические","Законы","Компьютеры","Лингвистика","Медицина","Научные","Оккультизм",
-                        "Политика","Расследование","Финансы"]} columnName={"Знания"}/>
-                </div>
             </div>
 
             <div>
@@ -82,13 +82,13 @@ export default function CharacterPage()
             <div className={styles.three_center_columns}>
                 
                 <div>
-                    <InputColumn columnName={"Дополнения"} rowsCount={6}/>
+                    <InputColumn columnName={"Дополнения"} rowsCount={6} onValueChange = {onStatChange}/>
                 </div>
                 <div>
-                <InputColumn columnName={"Дисциплины"} rowsCount={6}/>
+                    <InputColumn columnName={"Дисциплины"} rowsCount={6} onValueChange={onStatChange}/>
                 </div>
                 <div>
-                    <Virtues/>
+                    <Virtues onValueChange={onStatChange}/>
                 </div>
             </div>
 
@@ -101,28 +101,28 @@ export default function CharacterPage()
             <div className={styles.three_center_columns}>
                 
                 <div>
-                    <InputColumn columnName={"Остальные черты"} rowsCount={12}/>
+                    <InputColumn columnName={"Остальные черты"} rowsCount={12} onValueChange={onStatChange}/>
                 </div>
                 <div>
                     <div>
-                        <Humanity/>
+                        <Humanity onValueChange = {onStatChange}/>
                     </div>
                     <div>
-                        <Willpower/>
+                        <Willpower onValueChange={onStatChange}/>
                     </div>
                     <div>
-                        <Bloodpool/>
+                        <Bloodpool onValueChange = {onStatChange}/>
                     </div>
                 </div>
                 <div>
                     <div>
-                        <Health/>
+                        <Health onValueChange={onStatChange}/>
                     </div>
                     <div>
-                        <Weakness/>
+                        <Weakness onValueChange={onStatChange}/>
                     </div>
                     <div>
-                        <Experience/>
+                        <Experience onValueChange={onStatChange}/>
                     </div>
                 </div>
             </div>

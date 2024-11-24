@@ -15,8 +15,6 @@ export default function App(){
 
     return (
         <div>
-
-
             <div>{pageComponents[currentPage]}</div>
         </div>
     )

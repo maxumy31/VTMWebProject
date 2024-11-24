@@ -1,9 +1,9 @@
-export default function Weakness()
+export default function Weakness({onValueChange})
 {
     return(
         <>
         <h4>Слабость</h4>
-        <input/>
+        <input onChange={(e) => onValueChange("Слабость",e.target.value)}/>
         </>
     )
 }

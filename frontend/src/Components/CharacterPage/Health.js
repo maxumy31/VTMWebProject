@@ -9,11 +9,12 @@ import full_health from "./../../Images/damage/empty_square.png";
 
 
 
-export default function Health()
+export default function Health({onValueChange})
 {
     const [health,setHealth] = useState(Array(8).fill(0))
     const images = [full_health,blunt_damage,lethal_damage,aggravated_damage]
-    let toggleHelth = function(dot) {
+
+    let toggleHealth = function(dot) {
         let state = health[dot]
         let newState = 0
         const newStates = [...health];
@@ -36,6 +37,7 @@ export default function Health()
                 break;
         }
         newStates[dot] = newState
+        onValueChange("Здоровье" + dot, newState)
         setHealth(newStates)
     }
 
@@ -46,8 +48,7 @@ export default function Health()
     return(
         <>
         <h4>Здоровье</h4>
-        {healthConditions.map( (v,id) => <p key = {id}><img src = {images[health[id]]} alt = {"Картинка не найдена"} onClick={() => toggleHelth(id)} width = "30px" />{v}</p>)}
- 
+        {healthConditions.map( (v,id) => <p key = {id}><img src = {images[health[id]]} alt = {"Картинка не найдена"} onClick={() => toggleHealth(id)} width = "30px" />{v}</p>)}
         </>
     )
 }

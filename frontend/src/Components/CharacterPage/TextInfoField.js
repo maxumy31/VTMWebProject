@@ -1,9 +1,9 @@
-export default function TextInfoField({PlaceholderText})
+export default function TextInfoField({placeholderText,onValueChange})
 {
     return(
         <div>
-            <h4>{PlaceholderText}</h4>
-            <input/>
+            <h4>{placeholderText}</h4>
+            <input onChange={(e) => onValueChange(placeholderText,e.target.value)}/>
         </div>
     )
 }

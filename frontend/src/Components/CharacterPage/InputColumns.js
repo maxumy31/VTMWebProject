@@ -2,15 +2,18 @@
 import DotsLine from "./DotsLine"
 import styles from "./InputColumn.module.css"
 
-export default function InputColumn({columnName,rowsCount})
+export default function InputColumn({columnName,rowsCount,onValueChange})
 {
     columnName = columnName || "Empty column name"
     rowsCount = rowsCount || 6
 
     function RenderRows()
     {
-      let i = 0
-      return Array.from({ length: 8 }).map(x => <div key = {i++}><input className={styles.input}/><DotsLine dotCount={8} valueRef={123}/></div>);
+      return Array.from({ length: 8 }).map((x,i) => 
+      <div key = {i}>
+        <input className={styles.input} onChange={(e) => onValueChange(columnName + i + "Name",e.target.value)}/>
+        <DotsLine dotCount={8} onChange={(nv) => onValueChange(columnName + i + "Value",nv)}/>
+      </div>);
     };
     return(
         <>

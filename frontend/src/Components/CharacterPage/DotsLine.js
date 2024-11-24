@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import standart_empty_dot from "./../../Images/dots/empty_dot.png";
 import standart_full_dot from "./../../Images/dots/full_dot.png";
 import styles from "./DotsLine.module.css"
-export default function DotsLine({ dotCount, valueRef ,minValue,dotsPerRow,initialValue, full_dot,empty_dot}) 
+export default function DotsLine({ dotCount,minValue,dotsPerRow,initialValue, full_dot,empty_dot,onChange}) 
 {
     const [dots, setDots] = useState(Array(dotCount || 8).fill(false));
 
@@ -31,7 +31,8 @@ export default function DotsLine({ dotCount, valueRef ,minValue,dotsPerRow,initi
         return res;
   }
 
-  function onDotClick(dotIndex) {
+  function onDotClick(dotIndex)
+  {
     const newDots = [...dots];
 
     if (dots[dotIndex]) 
@@ -52,7 +53,7 @@ export default function DotsLine({ dotCount, valueRef ,minValue,dotsPerRow,initi
             newDots[i] = true;
         }
     }
-
+    onChange(newDots.filter(x => x * 1 === 1 * 1).length,dots.filter(x => x * 1 === 1 * 1).length)
     setDots(newDots);
   }
   return <div className={styles.block}>{generateDots()}</div>;
