@@ -9,6 +9,11 @@
     margin-top: 10%;
 }
 
+.wrap * input:hover
+{
+    background-color: antiquewhite;
+}
+
 .header
 {
     text-align: center;

@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import standart_empty_dot from "./../../Images/dots/empty_dot.png";
 import standart_full_dot from "./../../Images/dots/full_dot.png";
 import styles from "./DotsLine.module.css"
-export default function DotsLine({ dotCount,minValue,dotsPerRow,initialValue, full_dot,empty_dot,onChange}) 
+export default function DotsLine({ dotCount, minValue, initialValue, full_dot, empty_dot, onChange}) 
 {
-    const [dots, setDots] = useState(Array(dotCount || 8).fill(false));
-
-    dotsPerRow = 10 || dotsPerRow
     initialValue = 0 || initialValue
     minValue = minValue || 0
     empty_dot = empty_dot || standart_empty_dot
     full_dot = full_dot || standart_full_dot
+
+    const [dots, setDots] = useState(Array(dotCount || 8).fill(false).map((v,i) => i < initialValue ? true : false));
 
     function generateDots() 
     {

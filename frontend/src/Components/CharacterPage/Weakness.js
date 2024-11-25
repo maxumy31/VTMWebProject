@@ -1,9 +1,11 @@
-export default function Weakness({onValueChange})
+export default function Weakness({onValueChange,initCharacterData})
 {
+    const key = "Слабость"
     return(
         <>
-        <h4>Слабость</h4>
-        <input onChange={(e) => onValueChange("Слабость",e.target.value)}/>
+        <h4>{key}</h4>
+        <input onChange={(e) => onValueChange(key,e.target.value)} 
+        value={initCharacterData.hasOwnProperty(key) ? initCharacterData[key] : ""}/>
         </>
     )
 }

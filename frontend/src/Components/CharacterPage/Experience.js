@@ -1,9 +1,12 @@
-export default function Experience({onValueChange})
+export default function Experience({onValueChange,initCharacterData})
 {
+    const header = "Опыт"
+    const key = "Опыт"
     return(
         <>
-        <h4>Опыт</h4>
-        <input onChange={(e) => onValueChange("Опыт",e.target.value)}/>
+        <h4>{header}</h4>
+        <input onChange={(e) => onValueChange(key,e.target.value)} type = "number"
+        defaultValue={initCharacterData.hasOwnProperty[key] ? initCharacterData[key] : 0}/>
         </>
     )
 }
