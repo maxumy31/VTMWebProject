@@ -40,9 +40,8 @@ public class UserController:ControllerBase
         return new List<LinkDTO>
         {
             new LinkDTO(path + "User","self","GET"),
-            new LinkDTO(path + "User/{id}","self","GET"),
             new LinkDTO(path + "User","self","POST"),
-            new LinkDTO(path + "Characters/{userID}","self","Get")
+            new LinkDTO(path + "Characters","self","Get")
         };
     }
 
@@ -91,8 +90,15 @@ public class UserController:ControllerBase
         {
             return dto;
         }
-
-        User user = new User(request.Login,_hasher.HashPassword(request.Password));
+        User user;
+        try
+        {
+            user = new User(request.Login,_hasher.HashPassword(request.Password));
+        }
+        catch(Exception e)
+        {
+            return dto;
+        }
 
 
         var result = await _context.AddNewUserAsync(user);

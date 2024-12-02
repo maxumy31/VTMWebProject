@@ -26,7 +26,8 @@ public class CharacterController : ControllerBase
         return new List<LinkDTO>
         {
             new LinkDTO(path + "Character","self","POST"),
-
+            new LinkDTO(path + "Character","self","POST"),
+            new LinkDTO(path + "Character","self","DELETE"),
         };
     }
 

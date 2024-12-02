@@ -27,25 +27,52 @@ public class AuthController : ControllerBase{
         _hasher = hasher;
     }
 
-    [HttpPost("")]
-    public async Task<IActionResult> Login(UserDTO user)
+        [NonAction]
+    public List<LinkDTO> GenerateUserLinkPool()
     {
+        string path = "http://localhost:5012/";
+        return new List<LinkDTO>
+        {
+            new LinkDTO(path + "Login","self","GET"),
+            new LinkDTO(path + "Login","self","DELETE"),
+
+        };
+    }
+
+    [HttpPost("")]
+    public async Task<RestDTO<bool>> Login(UserDTO user)
+    {
+        RestDTO<bool> dto = new RestDTO<bool>();
+        dto.Links = GenerateUserLinkPool();
+
         var foundUser = await _context.GetUserByUsernameAsync(user.Login);
-        if(foundUser == null) return NotFound();
-        var passwordCompare = _hasher.VerifyPassword(foundUser.Password,user.Password);
-        if(!passwordCompare) return NotFound();
+        if(foundUser == null) return dto;
+        bool passwordCompare = false;
+        try
+        {
+        passwordCompare = _hasher.VerifyPassword(foundUser.Password,user.Password);
+        }
+        catch (Exception e)
+        {
+            return dto;
+        }
+        if(!passwordCompare) return dto;
 
         await _auth.SetAuthAsync(HttpContext,foundUser);
         _logger.LogInformation("Cookie was set");
+        dto.Data = true;
 
-        return Ok("Login succesful");
+        return dto;
     }
 
     [HttpDelete("")]
-    public async Task<IActionResult> Logout()
+    public async Task<RestDTO<bool>> Logout()
     {
+        RestDTO<bool> dto = new RestDTO<bool>();
+        dto.Links = GenerateUserLinkPool();
+        dto.Data = true;
         await _auth.ClearAuthAsync(HttpContext);
-        return Ok("Logout finished");
+        return dto;
     }
 
 }
