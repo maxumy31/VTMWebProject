@@ -10,41 +10,54 @@ import Virtues from "../Components/CharacterPage/Virtues";
 import Weakness from "../Components/CharacterPage/Weakness";
 import Willpower from "../Components/CharacterPage/Willpower";
 import styles from "./CharacterPage.module.css";
+import { apiService } from '../Api/ApiService.js';
+
+
+
 export default function CharacterPage({loadNextPage})
 {
     let charactersStats = {}
-
-    loadCharacter()
-
-    function loadCharacter() 
+    let characterId
+    const userID = localStorage.getItem("userID")
+    let char = JSON.parse(localStorage.getItem("character"))
+    console.log(char)
+    
+    if(char != null)
     {
-        charactersStats["Название пути"] = "Путь ночи"
-        charactersStats["Значение пути"] = 10
-        charactersStats["Имя"] = "Граф Дракула"
-        charactersStats["Убежище"] = "Замок"
-        charactersStats["Сила"] = 3
-        charactersStats["Атлетика"] = 6
-        charactersStats["Ловкость"] = 1
-        charactersStats["Дополнения1Name"] = 1
-        charactersStats["Дисциплины1Value"] = 1
-        charactersStats["Постоянная сила воли"] = 1
-        charactersStats["Сила воли"] = 1
-        charactersStats["Смелость"] = 4
-        charactersStats["Слабость"] = "Любит пончики"
-        charactersStats["Опыт"] = 4
-        charactersStats["Запас крови"] = 12
-        charactersStats["Здоровье2"] = 3
-        charactersStats["Остальные черты1Name"] = "Черта1"
+        console.log("Loading character")
+        charactersStats = JSON.parse(char["characterData"])
+        console.log(charactersStats)
+        characterId = char['id']
+    }
+    else
+    {
+        console.log("Creating new character")
+        apiService.post("Character",{"characterData":JSON.stringify({"Имя":""}),"userID":userID}).then(r =>
+        {
+            characterId = r.data["data"]["id"]
+        }
+        )
+    }
 
+
+
+    function saveCharacter()
+    {
+        const date = Date()
+        charactersStats["Последнее изменение"] = Date()
+        const charString = (JSON.stringify(charactersStats))
+        console.log(charString)
+        apiService.put('Character',{"id":characterId,"characterData":charString,"userID":userID})
     }
 
     function onStatChange(name,newValue) 
     {
         charactersStats[name] = newValue
+        saveCharacter()
         console.log(charactersStats)
     }
 
-    const headerData = [["Имя","Игрок", "Хроника"],["Натура","Маска", "Клан"],["Поколение","Убежище", "Конецпт"]]
+    const headerData = [["Имя","Игрок", "Хроника"],["Натура","Маска", "Клан"],["Поколение","Убежище", "Концепт"]]
 
     const atributes = {
         "Физические":["Сила","Ловкость","Выносливость"],
