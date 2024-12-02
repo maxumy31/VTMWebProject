@@ -13,18 +13,17 @@ public class User
 
     [Required]
     [MaxLength(20)]
-    public string? Login{get;set;}
+    public string Login{get;set;}
 
     [Required]
-    [MaxLength(20)]
-    public string? Password{get;set;}
+    public string Password{get;set;}
 
     public ICollection<Character>? Characters{get;set;}
 
-    public User(){}
     public User(string login,string password)
     {
         Login = login;
         Password = password;
+        Characters = [];
     }
 }

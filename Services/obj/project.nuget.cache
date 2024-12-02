@@ -1,13 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "LKUgmJW1C0YSEWEXPCwU2CmcxyPzh0JAekeBoh+hPQ/VFJpa49LzihqvvKGEJdHx7ymR3V9oR+34KjgxyV2Qkg==",
+  "dgSpecHash": "QTIkx2NMZMf0YHLPJf3PZyprgs1uKVijj14jj1m4SQv5G4e4fIF+Z2AnfCQbww/htmb2aKtWaiswuKazPYTuPA==",
   "success": true,
   "projectFilePath": "F:\\VTMSite\\Services\\Services.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Максимка\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.3\\microsoft.aspnetcore.openapi.8.0.3.nupkg.sha512",
     "C:\\Users\\Максимка\\.nuget\\packages\\microsoft.identitymodel.abstractions\\8.2.1\\microsoft.identitymodel.abstractions.8.2.1.nupkg.sha512",
     "C:\\Users\\Максимка\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\8.2.1\\microsoft.identitymodel.jsonwebtokens.8.2.1.nupkg.sha512",
     "C:\\Users\\Максимка\\.nuget\\packages\\microsoft.identitymodel.logging\\8.2.1\\microsoft.identitymodel.logging.8.2.1.nupkg.sha512",
     "C:\\Users\\Максимка\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.2.1\\microsoft.identitymodel.tokens.8.2.1.nupkg.sha512",
+    "C:\\Users\\Максимка\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
     "C:\\Users\\Максимка\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.2.1\\system.identitymodel.tokens.jwt.8.2.1.nupkg.sha512"
   ],
   "logs": []
