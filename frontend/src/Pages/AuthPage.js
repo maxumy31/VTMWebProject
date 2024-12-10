@@ -3,8 +3,6 @@ import React, { useState , useEffect} from 'react';
 import { apiService } from '../Api/ApiService.js';
 import caineImage from "./../Images/caine.webp";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { setUser, clearUser, store } from './../Store/store'; 
 
 export default function AuthPage({loadNextPage})
 {
@@ -28,9 +26,7 @@ export default function AuthPage({loadNextPage})
 
     const handlePassowrdChange = prepareHandleChange(setUserPassword)
 
-    const dispatch = useDispatch()
 
-    const user = useSelector((state) => state.user)
 
 
     function handleAuth()
@@ -38,7 +34,7 @@ export default function AuthPage({loadNextPage})
         apiService.post('Auth',{"login":userLogin,"password":userPassword}) 
           .then(response => {
             console.log(response.data);
-            LoadCookie()
+            loadCookie()
           })
           .catch(error => {
             console.error('Error fetching data:', error);
@@ -90,36 +86,44 @@ export default function AuthPage({loadNextPage})
     }
 
 
-    function LoadCookie()
+    function loadCookie()
     {
       apiService.get('User').then(response => 
         {
           if(response["data"]["data"] != null) {
             const cid = response["data"]["data"]["id"]
-            dispatch(setUser({id : cid}))
+            localStorage.setItem("userID",cid)
             console.log("cookie loaded")
+            tryLogin()
           } else {
             console.log("cookie not loaded")
           }
         })
     }
 
+    function tryLogin()
+    {
+      const storedUserId = localStorage.getItem("userID")
+      console.log(storedUserId)
+      if(storedUserId)
+      {
+        loadNextPage("character_overview")
+        return true;
+      }
+      return false;
+    }
+
     useEffect(() => {
       console.log("use effect")
-      const storedUserId = localStorage.getItem("userID")
-      if(user && user.id)
+      if(tryLogin())
       {
-        console.log("updatedUser inside : ",user.id);
-        localStorage.setItem("userID",user.id)
-        loadNextPage("character_overview")
-      } else if(storedUserId)
+        console.log("setting to storage")
+      } 
+      else 
       {
-        console.log("setting to storage", storedUserId)
-        dispatch(setUser({id : storedUserId}))
-      } else {
-        LoadCookie();
+        loadCookie();
       }
-    },[user])
+    },)
 
 
     

@@ -5,7 +5,7 @@ export default function Weakness({onValueChange,initCharacterData})
         <>
         <h4>{key}</h4>
         <input onChange={(e) => onValueChange(key,e.target.value)} 
-        value={initCharacterData.hasOwnProperty(key) ? initCharacterData[key] : ""}/>
+        defaultValue={initCharacterData.hasOwnProperty(key) ? initCharacterData[key] : ""}/>
         </>
     )
 }

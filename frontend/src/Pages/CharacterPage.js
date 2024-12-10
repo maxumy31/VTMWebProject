@@ -46,7 +46,6 @@ export default function CharacterPage({loadNextPage})
         const date = Date()
         charactersStats["Последнее изменение"] = Date()
         const charString = (JSON.stringify(charactersStats))
-        console.log(charString)
         apiService.put('Character',{"id":characterId,"characterData":charString,"userID":userID})
     }
 

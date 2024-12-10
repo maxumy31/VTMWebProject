@@ -3,23 +3,17 @@ import CreateNewCharacter from "../Components/CharacterOverview/CreateNewCharact
 import styles from "./CharacterOverview.module.css"
 import { apiService } from '../Api/ApiService.js';
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { setUser, clearUser, store } from './../Store/store'; 
 
 
 export default function CharacterOverview({loadNextPage})
 {
-    let userID = 0
     const [characters, setCharacters] = useState([])
     const [isLoading, setLoading] = useState(true)
 
-    const dispatch = useDispatch()
 
-    const user = useSelector((state) => state.user)
-
-    
+    const userID = localStorage.getItem("userID")
     if(isLoading)
-    apiService.get('Characters?userID=' + user.id).then( r=>
+    apiService.get('Characters?userID=' + userID).then( r=>
         {
             const data = r.data['data']
             const filteredData = data.filter(v => v.hasOwnProperty("characterData")).sort((a,b) => a["Последнее изменение"] - b["Последнее изменение"]).reverse()
@@ -30,14 +24,13 @@ export default function CharacterOverview({loadNextPage})
                 setLoading(false)
             })
 
-    console.log("user = ",user)
+    console.log("user = ",userID)
     localStorage.removeItem("character")
 
 
     function logout()
     {
         localStorage.clear()
-        dispatch(clearUser());
         apiService.delete("Auth").then(r =>
         {
             loadNextPage("auth")
