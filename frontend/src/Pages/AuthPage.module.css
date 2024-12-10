@@ -9,6 +9,11 @@
     margin-top: 10%;
 }
 
+.wrap * input:hover
+{
+    background-color: antiquewhite;
+}
+
 .header
 {
     text-align: center;
@@ -16,8 +21,8 @@
 
 .user_input
 {
-    width: 80%;
-    height: 80%;
+    width: 250px;
+    height: 20px;
     margin-left: 10%;
     margin-right: 10%;
 }

@@ -1,17 +1,36 @@
-import empty_dot from "./../../Images/dots/empty_dot.png"
-import full_dot from "./../../Images/dots/full_dot.png"
-import DotsLine from "./DotsLine"
 
-export default function InputColumn({columnName,rowsCount})
+import DotsLine from "./DotsLine"
+import styles from "./InputColumn.module.css"
+
+export default function InputColumn({columnName,rowsCount,onValueChange,initCharacterData})
 {
     columnName = columnName || "Empty column name"
     rowsCount = rowsCount || 6
 
+    function getColumnName(column,id)
+    {
+      return column + id + "Name"
+    }
+
+    function getColumnValueName(column,id)
+    {
+      return column + id + "Value"
+    }
+
     function RenderRows()
     {
-      let i = 0
-      return Array.from({ length: 8 }).map(x => <p key = {i++}><input/><DotsLine dotCount={8} valueRef={123}/></p>);
+      return Array.from({ length: 8 }).map((x,i) => 
+      <div key = {i}>
+        <input className={styles.input} 
+        onChange={(e) => onValueChange(getColumnName(columnName,i),e.target.value)}
+        defaultValue={initCharacterData.hasOwnProperty(getColumnName(columnName,i)) ? initCharacterData[getColumnName(columnName,i)] : ""}/>
+
+        <DotsLine dotCount={8} onChange={(nv) => onValueChange(getColumnValueName(columnName,i),nv)}
+          initialValue={initCharacterData.hasOwnProperty(getColumnValueName(columnName,i)) ? initCharacterData[getColumnValueName(columnName,i)] : 0}/>
+      </div>);
     };
+
+
     return(
         <>
         <h3>{columnName}</h3>

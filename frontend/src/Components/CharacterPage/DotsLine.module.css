@@ -8,12 +8,12 @@
     width: 27px;
     height: 27px;
     margin: 4px 4px 4px 4px;
-    background-color: #A5A5A5;
+
 }
 .block
 {
-    width: 400px;
-    height: 40px;
+    max-width: 100%;
+    height: auto;
 }
 
 .img_out

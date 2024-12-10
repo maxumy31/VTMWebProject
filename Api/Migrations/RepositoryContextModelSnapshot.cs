@@ -28,49 +28,12 @@ namespace Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Attibutes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Backgrounds")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("Bloodpool")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Disciplines")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("Experience")
-                        .HasColumnType("integer");
-
-                    b.Property<byte[]>("Health")
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("OtherTraits")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PathName")
-                        .HasColumnType("text");
-
-                    b.Property<byte?>("PathValue")
-                        .HasColumnType("smallint");
-
-                    b.Property<string>("Skills")
+                    b.Property<string>("CharacterData")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("UserID")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Virtues")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("WillPower")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("WillPowerLimit")
-                        .HasColumnType("integer");
 
                     b.HasKey("ID");
 
@@ -93,11 +56,7 @@ namespace Api.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<Guid>("Role")
-                        .HasColumnType("uuid");
+                        .HasColumnType("text");
 
                     b.HasKey("ID");
 
