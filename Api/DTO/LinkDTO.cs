@@ -1,4 +1,4 @@
-namespace Repository.DTO;
+namespace DTO;
 
 public class LinkDTO
 {

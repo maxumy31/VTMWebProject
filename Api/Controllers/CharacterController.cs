@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Models;
 using Repository;
-using Repository.DTO;
+using DTO;
+using Services.CharacterService;
 
 namespace Api.Controllers;
 
@@ -10,15 +10,21 @@ namespace Api.Controllers;
 [ApiController]
 public class CharacterController : ControllerBase
 {
+    //Логгер, осуществляет логирование
     private readonly ILogger<UserController> _logger;
+    //Репозиторий, интерфейс, реализация которого взаимодействует с бд
+    //и осуществляет необходимые манипуляции с данными
     private readonly IRepository _context;
+    private readonly ICharacterService _characterService;
 
-    public CharacterController(IRepository context,ILogger<UserController> logger)
+    public CharacterController(IRepository context,ILogger<UserController> logger, ICharacterService characterService)
     {
         _logger = logger;
         _context = context;
+        _characterService = characterService;
     }
 
+    //Генерирует набор ссылок для паттеран HateOAS
     [NonAction]
     public List<LinkDTO> GenerateCharacterLinkPool()
     {
@@ -31,6 +37,8 @@ public class CharacterController : ControllerBase
         };
     }
 
+    //Метод принимает данные о персонаже в виде его id и данных в виде строки
+    //Создает его и возвращает данные о созданном персонаже
     [HttpPost("")]
     public async Task<RestDTO<Character?>> CreateCharacter(CharacterDTO character)
     {
@@ -38,31 +46,35 @@ public class CharacterController : ControllerBase
         Character newCharacter = new Character();
         newCharacter.CharacterData = character.CharacterData;
         newCharacter.UserID = character.UserID;
-        var ready = await _context.AddNewCharacterAsync(newCharacter);
-        _logger.LogInformation("New character created");
 
         return new RestDTO<Character?>
         {
-            Data = newCharacter,
+            Data = await _characterService.CreateCharacterAsync(newCharacter),
             Links = GenerateCharacterLinkPool()
         };
 
     }
 
+    //Метод принимает id персонажа
+    //И возвращает персонажа, если его id кому-то соответствует
     [HttpGet("")]
     public async Task<RestDTO<Character>> GetCharacterById(Guid id)
     {
+        var character = await _characterService.GetCharacterByIdAsync(id);
         return new RestDTO<Character>
         {
-            Data = await _context.GetCharacterByIdAsync(id),
+            Data = character,
             Links = GenerateCharacterLinkPool()
         };
     }
 
+    //Метод принимает новое состояние персонажа и по id, полученному из 
+    //запроса и обновляет это состояние
+    //Возвращает, удалось ли обновить
     [HttpPut("")]
     public async Task<RestDTO<bool>> UpdateCharacterById(Character c)
     {
-        var result = await _context.UpdateCharacterById(c.ID,c);
+        var result = await _characterService.UpdateCharacterByIdAsync(c.ID,c);
         if(result) _logger.LogInformation("Character was updated");
         return new RestDTO<bool>
         {
@@ -71,10 +83,12 @@ public class CharacterController : ControllerBase
         };
     }
 
+    //Метод удаляет персонажа по его id
+    //Возвращает, удалось ли удалиить
     [HttpDelete("")]
     public async Task<RestDTO<bool>> DeleteCharacterById(Guid id)
     {
-        bool result = await _context.DeleteCharacterById(id);
+        bool result = await _characterService.DeleteCharacterByIdAsync(id);
         if(result) _logger.LogInformation("Character was deleted");
         return new RestDTO<bool>
         {

@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Services.UserService;
+using Services.CharacterService;
 using Repository;
 using Hashing;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -30,6 +30,10 @@ builder.Services.AddScoped(provider =>
 
 //Добавляем сервис для хэширования
 builder.Services.AddSingleton<IPasswordHasherService,PasswordHasherService>();
+
+//Сервисы с логикой
+builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<ICharacterService,CharacterService>();
 
 
 //Куки авторизация

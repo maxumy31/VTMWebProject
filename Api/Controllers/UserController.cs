@@ -1,38 +1,43 @@
 using Hashing;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models;
 using Repository;
-using Repository.DTO;
+using DTO;
 using Auth;
-using Microsoft.AspNetCore.Authorization;
 using Validation;
-
+using Services.UserService;
 
 namespace Api.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class UserController:ControllerBase
+public class UserController : ControllerBase
 {
+    //Логгер, осуществляет логирование
     private readonly ILogger<UserController> _logger;
+    //Репозиторий, интерфейс, реализация которого взаимодействует с бд
+    //и осуществляет необходимые манипуляции с данными
     private readonly IRepository _context;
+    //Интерфейс, реализация которого хэширует пароли для их дальнейшего хранения,
+    //а также позволяет сравнивать пароли
     private readonly IPasswordHasherService _hasher;
-    private readonly IAuthService _auth;
+    //Интерфейс, реализация которого проверяет, соответствует ли строка необходимым требованиям
+    //Позволяет проверять логин и пароль на соответствие некоторым правилам
     private readonly IStringValidator _validator;
+    //Интерфейс сервиса с логикой контроллера
+    private readonly IUserService _userService;
 
     public UserController(IRepository context,ILogger<UserController> logger, IPasswordHasherService hasher, 
-        IAuthService auth, IStringValidator validator)
+        IAuthService auth, IStringValidator validator, IUserService userService)
     {
         _hasher = hasher;
         _logger = logger;
         _context = context;
-        _auth = auth;
         _validator = validator;
+        _userService = userService;
     }
 
-
+    //Генерирует набор ссылок для паттерна HATEOAS
     [NonAction]
     public List<LinkDTO> GenerateUserLinkPool()
     {
@@ -45,6 +50,8 @@ public class UserController:ControllerBase
         };
     }
 
+    //Метод позволяет получить пользователя, оперируя данными из
+    //аутентификационного куки
     [HttpGet("")]
     public async Task<RestDTO<User?>> GetUserByAuth()
     {
@@ -55,10 +62,11 @@ public class UserController:ControllerBase
         var idClaim = HttpContext.User.FindFirst("id");
         if(idClaim == null) return dto;
         var id = idClaim.Value;
-
-        _logger.LogInformation("Cookie found");
         if(id == null) return dto;
-        User user = await _context.GetUserByIdAsync(new Guid(id));
+        _logger.LogInformation("Cookie found");
+
+        
+        User user = await _userService.GetUserByIdAsync(id);
         
         dto.Data = user;
         
@@ -68,7 +76,8 @@ public class UserController:ControllerBase
 
     
 
-
+    //Метод позволяет создать пользователя
+    //Возвращает данные пользователя при успехе
     [HttpPost(Name="")]
     [ResponseCache(NoStore =true)]
     public async Task<RestDTO<User?>> CreateUser(UserDTO request)
@@ -76,59 +85,19 @@ public class UserController:ControllerBase
         RestDTO<User?> dto = new RestDTO<User?>();
         dto.Links = GenerateUserLinkPool();
 
-        if(!_validator.validLogin(request.Login))
-        {
-            return dto;
-        }
-        if (!_validator.validPassword(request.Password))
-        {
-            return dto;
-        }
-
-        var existingUser = await _context.GetUserByUsernameAsync(request.Login);
-        if(existingUser != null) 
-        {
-            return dto;
-        }
-        User user;
-        try
-        {
-            user = new User(request.Login,_hasher.HashPassword(request.Password));
-        }
-        catch(Exception e)
-        {
-            return dto;
-        }
-
-
-        var result = await _context.AddNewUserAsync(user);
-        _logger.LogInformation("Created new user");
-
-        
-
-        if(!result)
-        {
-            return dto;
-        }
-        
-        dto.Data = await _context.GetUserByUsernameAsync(user.Login);
+        User user = new User(request.Login,request.Password);
+        dto.Data = await _userService.CreateUserAsync(user);
         return dto;
     }
 
+    //Метод возвращает всех персонажей, которые принадлежат пользователю с заданным id
     [HttpGet("/Characters/")]
-    public async Task<RestDTO<Character[]?>> GetCharacterIdsForUserID(Guid userID)
+    public async Task<RestDTO<Character[]>> GetCharacterIdsForUserID(Guid userID)
     {
-        var chars = await _context.GetCharactersByUserIdAsync(userID);
-
         RestDTO<Character[]> dto = new RestDTO<Character[]>();
         dto.Links = GenerateUserLinkPool();
 
-        if(chars == null)
-        {
-            return dto;
-        }
-
-        dto.Data = chars;
+        dto.Data = await _userService.GetCharactersByUserIdAsync(userID);
         return dto;
     }
 

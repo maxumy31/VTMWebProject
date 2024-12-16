@@ -1,10 +1,9 @@
 
-
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-namespace Repository;
+using Repository;
 
 public class RepositoryContext : DbContext, IRepository
 {

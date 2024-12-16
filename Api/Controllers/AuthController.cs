@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Models;
 using Repository;
-using Repository.DTO;
+using DTO;
 using Hashing;
-using Microsoft.AspNetCore.Identity.Data;
 using Auth;
 namespace Api.Controllers;
 
@@ -12,14 +10,20 @@ namespace Api.Controllers;
 [ApiController]
 public class AuthController : ControllerBase{
 
+    //Репозиторий, интерфейс, реализация которого взаимодействует с бд
+    //и осуществляет необходимые манипуляции с данными
     private readonly IRepository _context;
-    private readonly ILogger<UserController> _logger;
-
+    //Логгер, осуществляет логирование
+    private readonly ILogger<AuthController> _logger;
+    //Интерфейс, реализация которого хэширует пароли для их дальнейшего хранения,
+    //а также позволяет сравнивать пароли
     private readonly IPasswordHasherService _hasher;
-
+    //Интерфейс, реализация которого отвечает за работу
+    //С авторизацией пользователя. В данный момент
+    //реализуется аутентификация с помощью куки
     private readonly IAuthService _auth;
 
-    public AuthController(IRepository context,ILogger<UserController> logger, IAuthService auth, IPasswordHasherService hasher)
+    public AuthController(IRepository context,ILogger<AuthController> logger, IAuthService auth, IPasswordHasherService hasher)
     {
         _logger = logger;
         _context = context;
@@ -27,7 +31,8 @@ public class AuthController : ControllerBase{
         _hasher = hasher;
     }
 
-        [NonAction]
+    //Генерирует набор ссылок для паттеран HateOAS
+    [NonAction]
     public List<LinkDTO> GenerateUserLinkPool()
     {
         string path = "http://localhost:5012/";
@@ -39,6 +44,8 @@ public class AuthController : ControllerBase{
         };
     }
 
+    //Проверяет, правильно ли введены данные пользователя
+    //Если правильно, то ставит авторизационное куки
     [HttpPost("")]
     public async Task<RestDTO<bool>> Login(UserDTO user)
     {
@@ -65,6 +72,7 @@ public class AuthController : ControllerBase{
         return dto;
     }
 
+    //Снимает авторизационное куки
     [HttpDelete("")]
     public async Task<RestDTO<bool>> Logout()
     {
