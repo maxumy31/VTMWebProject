@@ -10,7 +10,7 @@ class RepositoryContextFactory:IDesignTimeDbContextFactory<RepositoryContext>
     {
         var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.Development.json").Build();
 
-        var builder = new DbContextOptionsBuilder<RepositoryContext>().UseNpgsql(configuration.GetConnectionString("sqlConnection"),b=>b.MigrationsAssembly("Api"));
+        var builder = new DbContextOptionsBuilder<RepositoryContext>().UseNpgsql(configuration.GetConnectionString("sqlConnection"),b=>b.MigrationsAssembly("Repository"));
         return new RepositoryContext(builder.Options);
     }
 }

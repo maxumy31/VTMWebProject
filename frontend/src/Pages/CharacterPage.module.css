@@ -1,16 +1,10 @@
 .wrap
 {
     width: 70%;
-   /*background-color:rgb(231, 209, 181);*/
     margin-left: auto;
     margin-right: auto;
 }
 
-.background
-{
-    /*background-image: url(https://pics.craiyon.com/2024-09-18/kF1_J7KNREORNAlMssRoqQ.webp);
-    background-attachment: fixed;*/
-}
 
 .three_center_columns
 {
@@ -22,21 +16,42 @@
     row-gap: 10px;
 }
 
+.three_center_columns * input:hover
+{
+    background-color:antiquewhite;
+}
+
+.return_button
+{
+    width: 100px;
+    height: 30px;
+
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.return_button:hover 
+{
+    background-color: antiquewhite;
+}
+
 .column_description
 {
     margin-left: auto;
     margin-right: auto;
 }
 
-.column_description * input:hover
-{
-    background-color:cornflowerblue;
-}
-
-
 .column_description>*
 {
     margin-top: 40px;
+
+}
+
+.column_description * input
+{
+    width: 250px;
+    height: 20px;
+    font-size: large;
 }
 
 .header

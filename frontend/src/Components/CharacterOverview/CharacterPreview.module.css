@@ -10,10 +10,17 @@
 {
     height: 30px;
     width: 150px;
+    margin-left: 10px;
+}
 
+.text_wrap
+{
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
 .wrap>h4
 {
     text-align: left;
 }
+
