@@ -1,15 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Models;
-
-public class UserDTO
+public struct UserDTO
 {
-    public required string Password{get;set;}
-    public required string Login{get;set;}
-
-    public UserDTO(string login,string password)
-    {
-        Password = password;
-        Login = login;
-    }
+    public string Login{get;set;}
+    public string Password{get;set;}
 }

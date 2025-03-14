@@ -5,18 +5,18 @@ import CharacterPage from './Pages/CharacterPage';
 
 export default function App(){
     const [currentPage, setCurrentPage] = useState('auth')
+    let selectedCharacter = {}
 
     const pageComponents = {
         "auth": <AuthPage loadNextPage={setCurrentPage}/>,
-        "character_overview": <CharacterOverview loadNextPage={setCurrentPage}/>,
-        "character": <CharacterPage/>
+        "character_overview": <CharacterOverview loadNextPage={setCurrentPage} selectedCharacter = {selectedCharacter}/>,
+        "character": <CharacterPage loadNextPage={setCurrentPage}/>,
     }
+
 
 
     return (
         <div>
-
-
             <div>{pageComponents[currentPage]}</div>
         </div>
     )

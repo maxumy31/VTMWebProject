@@ -1,49 +1,43 @@
-
+using Hashing;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models;
 using Repository;
-using Repository.DTO;
+using DTO;
+using Auth;
+using Validation;
+using Services.UserService;
 
 namespace Api.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class UserController:ControllerBase
+public class UserController : ControllerBase
 {
+    //Логгер, осуществляет логирование
     private readonly ILogger<UserController> _logger;
-    private readonly RepositoryContext _context;
+    //Репозиторий, интерфейс, реализация которого взаимодействует с бд
+    //и осуществляет необходимые манипуляции с данными
+    private readonly IRepository _context;
+    //Интерфейс, реализация которого хэширует пароли для их дальнейшего хранения,
+    //а также позволяет сравнивать пароли
+    private readonly IPasswordHasherService _hasher;
+    //Интерфейс, реализация которого проверяет, соответствует ли строка необходимым требованиям
+    //Позволяет проверять логин и пароль на соответствие некоторым правилам
+    private readonly IStringValidator _validator;
+    //Интерфейс сервиса с логикой контроллера
+    private readonly IUserService _userService;
 
-    public UserController(RepositoryContext context,ILogger<UserController> logger)
+    public UserController(IRepository context,ILogger<UserController> logger, IPasswordHasherService hasher, 
+        IAuthService auth, IStringValidator validator, IUserService userService)
     {
+        _hasher = hasher;
         _logger = logger;
         _context = context;
+        _validator = validator;
+        _userService = userService;
     }
 
-    [HttpGet("")]
-    public async Task<RestDTO<User[]>> GetAllUsers()
-    {
-        var query = _context.Users;
-        return new RestDTO<User[]>
-        {   
-            Data = await query.ToArrayAsync(),
-            Links = GenerateUserLinkPool()
-        };
-    }
-
-    [HttpGet("{id}")]
-    public async Task<RestDTO<User?>> GetUserByID(Guid id)
-    {
-        var query = _context != null ? _context.Users : null;
-        if(_context == null) throw new Exception("Null database context");
-        return new RestDTO<User?>
-        {
-            Data = await query.Where(u => u.ID == id).FirstOrDefaultAsync(),
-            Links = GenerateUserLinkPool()
-        };
-    }
-
+    //Генерирует набор ссылок для паттерна HATEOAS
     [NonAction]
     public List<LinkDTO> GenerateUserLinkPool()
     {
@@ -51,70 +45,60 @@ public class UserController:ControllerBase
         return new List<LinkDTO>
         {
             new LinkDTO(path + "User","self","GET"),
-            new LinkDTO(path + "User/{id}","self","GET"),
             new LinkDTO(path + "User","self","POST"),
-            new LinkDTO(path + "Characters/{userID}","self","Get")
+            new LinkDTO(path + "Characters","self","Get")
         };
     }
 
-    [HttpPost(Name="")]
-    [ResponseCache(NoStore =true)]
-    public async Task<RestDTO<UserDTO?>> CreateUser(UserDTO user)
+    //Метод позволяет получить пользователя, оперируя данными из
+    //аутентификационного куки
+    [HttpGet("")]
+    public async Task<RestDTO<User?>> GetUserByAuth()
     {
-        RestDTO<UserDTO?> dto = new RestDTO<UserDTO?>();
-
-        var query = _context != null ? _context.Users : null;
-        if(_context == null) throw new Exception("Null database context");
-
-        var existingUser = await query.Where(u=>u.Login == user.Login).FirstOrDefaultAsync();
-        if(existingUser != null)
-        {
-            dto.Data = null;
-            dto.Links = GenerateUserLinkPool();
-            return dto;
-        }
-        
-        await query.AddAsync(new User(user.Login,user.Password));
-        await _context.SaveChangesAsync();
-        dto.Data = user;
+        _logger.LogInformation("debug");
+        RestDTO<User?> dto = new RestDTO<User?>();
         dto.Links = GenerateUserLinkPool();
+
+        var idClaim = HttpContext.User.FindFirst("id");
+        if(idClaim == null) return dto;
+        var id = idClaim.Value;
+        if(id == null) return dto;
+        _logger.LogInformation("Cookie found");
+
+        
+        User user = await _userService.GetUserByIdAsync(id);
+        
+        dto.Data = user;
+        
+
         return dto;
     }
 
-    [HttpDelete("{id}")]
-    public async Task<RestDTO<User?>> DeleteUserByID(Guid id)
+    
+
+    //Метод позволяет создать пользователя
+    //Возвращает данные пользователя при успехе
+    [HttpPost(Name="")]
+    [ResponseCache(NoStore =true)]
+    public async Task<RestDTO<User?>> CreateUser(UserDTO request)
     {
-        var query = _context.Users;
-        User? toDelete = await query.Where(c => c.ID == id).AsNoTracking().FirstOrDefaultAsync();
-        bool result = query.Remove(toDelete) != null ? true : false;
-        await _context.SaveChangesAsync();
-        if(result)
-        {
-            return new RestDTO<User?>
-            {
-                Data = toDelete,
-                Links = GenerateUserLinkPool()
-            };
-        }
-        else
-        {
-            return new RestDTO<User?>
-            {
-                Data = toDelete,
-                Links = GenerateUserLinkPool()
-            };
-        }
+        RestDTO<User?> dto = new RestDTO<User?>();
+        dto.Links = GenerateUserLinkPool();
+
+        User user = new User(request.Login,request.Password);
+        dto.Data = await _userService.CreateUserAsync(user);
+        return dto;
     }
 
-    [HttpGet("/Characters/{userID}")]
-    public async Task<RestDTO<Character[]?>> GetCharacterIdsForUserID(Guid userID)
+    //Метод возвращает всех персонажей, которые принадлежат пользователю с заданным id
+    [HttpGet("/Characters/")]
+    public async Task<RestDTO<Character[]>> GetCharacterIdsForUserID(Guid userID)
     {
-        Character[] chars = await _context.Characters.Where(c=>c.UserID == userID).AsNoTracking().AsQueryable().ToArrayAsync();
-        return new RestDTO<Character[]?>
-        {
-            Data = chars,
-            Links = GenerateUserLinkPool()
-        };
+        RestDTO<Character[]> dto = new RestDTO<Character[]>();
+        dto.Links = GenerateUserLinkPool();
+
+        dto.Data = await _userService.GetCharactersByUserIdAsync(userID);
+        return dto;
     }
 
 }

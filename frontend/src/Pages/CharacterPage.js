@@ -1,6 +1,5 @@
 
 import Bloodpool from "../Components/CharacterPage/Bloodpool";
-import DotsLine from "../Components/CharacterPage/DotsLine";
 import Experience from "../Components/CharacterPage/Experience";
 import Health from "../Components/CharacterPage/Health";
 import Humanity from "../Components/CharacterPage/Humanity";
@@ -11,112 +10,163 @@ import Virtues from "../Components/CharacterPage/Virtues";
 import Weakness from "../Components/CharacterPage/Weakness";
 import Willpower from "../Components/CharacterPage/Willpower";
 import styles from "./CharacterPage.module.css";
-export default function CharacterPage()
+import { apiService } from '../Api/ApiService.js';
+
+
+
+export default function CharacterPage({loadNextPage})
 {
+    let charactersStats = {}
+    let characterId
+    const userID = localStorage.getItem("userID")
+    let char = JSON.parse(localStorage.getItem("character"))
+    console.log(char)
+    
+    if(char != null)
+    {
+        console.log("Loading character")
+        charactersStats = JSON.parse(char["characterData"])
+        console.log(charactersStats)
+        characterId = char['id']
+    }
+    else
+    {
+        console.log("Creating new character")
+        apiService.post("Character",{"characterData":JSON.stringify({"Имя":""}),"userID":userID}).then(r =>
+        {
+            characterId = r.data["data"]["id"]
+        }
+        )
+    }
+
+
+
+    function saveCharacter()
+    {
+        const date = Date()
+        charactersStats["Последнее изменение"] = Date()
+        const charString = (JSON.stringify(charactersStats))
+        apiService.put('Character',{"id":characterId,"characterData":charString,"userID":userID})
+    }
+
+    function onStatChange(name,newValue) 
+    {
+        charactersStats[name] = newValue
+        saveCharacter()
+        console.log(charactersStats)
+    }
+
+    const headerData = [["Имя","Игрок", "Хроника"],["Натура","Маска", "Клан"],["Поколение","Убежище", "Концепт"]]
+
+    const atributes = {
+        "Физические":["Сила","Ловкость","Выносливость"],
+        "Социальные":["Харизма","Манипуляции","Внешность"],
+        "Ментальные":["Восприятие","Интеллект","Смекалка"]
+    }
+
+    const skills = {
+        "Таланты":["Атлетика","Внимательность","Запугивание","Знание улиц","Лидерство","Рукопашный бой",
+            "Уклонение","Хитрость","Экспрессия","Эмпатия"],
+        "Навыки":["Безопасность","Вождение","Выживание","Исполнение","Знание животных","Ремесла",
+            "Скрытность","Стрельба","Фехтование","Этикет"],
+        "Знания":["Академические","Законы","Компьютеры","Лингвистика","Медицина","Научные","Оккультизм",
+            "Политика","Расследование","Финансы"]
+    }
+    
     return(
+        
         <div className={styles.background}>
+        <div><button className={styles.return_button} onClick={ () => loadNextPage("character_overview")}>Назад</button></div>
         <div className={styles.wrap}>
             <div className={styles.three_center_columns}>
-                <div className={styles.column_description}>
-                    <TextInfoField PlaceholderText={"Name "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Chronicle "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Sire "}></TextInfoField>
-                </div>
-                <div className={styles.column_description}>
-                    <TextInfoField PlaceholderText={"Concept "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Ambition "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Desire "}></TextInfoField>
-                </div>
-                <div className={styles.column_description}>
-                    <TextInfoField PlaceholderText={"Predator "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Clan "}></TextInfoField>
-                    <TextInfoField PlaceholderText={"Generation "}></TextInfoField>
-                </div>
+                {headerData.map((v,i) =>
+                    <div key = {i} className={styles.column_description}>
+                        {
+                            v.map((vv,vi) => 
+                            <TextInfoField key = {vi} onValueChange = {onStatChange} placeholderText={vv} initCharacterData={charactersStats}/>)
+                        }
+                    </div>)}
             </div>
             <div>
-                <h2 className = {styles.header}>Attributes</h2>
-                <hr size = "5" noshade = "true"></hr>
+                <hr size = "3" noshade = "true"></hr>
+                <h2 className = {styles.header}>Атрибуты</h2>
+                <hr size = "3" noshade = "true"></hr>
             </div>
             
             <div className={styles.three_center_columns}>
-                
-                <div>
-                    <StatsColumn statsList={["Strength","Agility","Stamina"]} columnName={"Physical"}/>
-                </div>
-                <div>
-                    <StatsColumn statsList={["Charisma","Manipulation","Appearance"]} columnName={"Social"}/>
-                </div>
-                <div>
-                    <StatsColumn statsList={["Intelligence","Wits","Resolve"]} columnName={"Mental"}/>
-                </div>
+                {
+                    Object.entries(atributes).map(([k,v],i) => 
+                    <div key = {i}>
+                        <StatsColumn statsList={v} columnName={k} onValueChange={onStatChange} initCharacterData={charactersStats} minValue={1}/>
+                    </div>)
+                }
             </div>
 
             <div>
-                <h2 className = {styles.header}>Skills</h2>
-                <hr size = "5" noshade = "true"></hr>
+                <hr size = "3" noshade = "true"></hr>
+                <h2 className = {styles.header}>Способности</h2>
+                <hr size = "3" noshade = "true"></hr>
             </div>
             
             <div className={styles.three_center_columns}>
+                {
+                    Object.entries(skills).map(([k,v],i) => 
+                    <div key = {i}>
+                        <StatsColumn statsList={v} columnName={k} onValueChange={onStatChange} minValue={0} initCharacterData={charactersStats}/>
+                    </div>)
+                }
                 
+            </div>
+
+            <div>
+                <hr size = "3" noshade = "true"></hr>
+                <h2 className = {styles.header}>Преимущества</h2>
+                <hr size = "3" noshade = "true"></hr>
+            </div>
+
+            <div className={styles.three_center_columns}>
                 <div>
-                    <StatsColumn statsList={["Alertness","Athletics","Brawl","Dodge","Empathy","Expression","Intimidation","Leadership","Streetwise","Subterfuge"]} columnName={"Talents"}/>
+                    <InputColumn columnName={"Дополнения"} rowsCount={6} onValueChange = {onStatChange} initCharacterData={charactersStats}/>
                 </div>
                 <div>
-                    <StatsColumn statsList={["Animal Ken","Crafts","Drive","Etiquette","Firearms","Melee","Performance","Security","Stealth","Survival"]} columnName={"Skills"}/>
+                    <InputColumn columnName={"Дисциплины"} rowsCount={6} onValueChange={onStatChange} initCharacterData={charactersStats}/>
                 </div>
                 <div>
-                    <StatsColumn statsList={["Academics","Computer","Finance","Investigation","Law","Linguistics","Medicine","Occult","Politics","Science"]} columnName={"Knowledges"}/>
+                    <Virtues onValueChange={onStatChange} initCharacterData={charactersStats}/>
                 </div>
             </div>
 
             <div>
-                <h2 className = {styles.header}>Advantages</h2>
-                <hr size = "5" noshade = "true"></hr>
+                <hr size = "3" noshade = "true"></hr>
+                <h2 className = {styles.header}>Прочее</h2>
+                <hr size = "3" noshade = "true"></hr>
             </div>
 
             <div className={styles.three_center_columns}>
                 
                 <div>
-                    <InputColumn columnName={"Backgrounds"} rowsCount={6}/>
-                </div>
-                <div>
-                <InputColumn columnName={"Disciplines"} rowsCount={6}/>
-                </div>
-                <div>
-                    <Virtues/>
-                </div>
-            </div>
-
-            <div>
-                <h2 className = {styles.header}></h2>
-                <hr size = "5" noshade = "true"></hr>
-            </div>
-
-            <div className={styles.three_center_columns}>
-                
-                <div>
-                    <InputColumn columnName={"Other traits"} rowsCount={12}/>
+                    <InputColumn columnName={"Остальные черты"} rowsCount={12} onValueChange={onStatChange} initCharacterData={charactersStats}/>
                 </div>
                 <div>
                     <div>
-                        <Humanity/>
+                        <Humanity onValueChange = {onStatChange} initCharacterData={charactersStats}/>
                     </div>
                     <div>
-                        <Willpower/>
+                        <Willpower onValueChange={onStatChange} initCharacterData={charactersStats}/>
                     </div>
                     <div>
-                        <Bloodpool/>
+                        <Bloodpool onValueChange = {onStatChange} initCharacterData={charactersStats}/>
                     </div>
                 </div>
                 <div>
                     <div>
-                        <Health/>
+                        <Health onValueChange={onStatChange} initCharacterData={charactersStats}/>
                     </div>
                     <div>
-                        <Weakness/>
+                        <Weakness onValueChange={onStatChange} initCharacterData={charactersStats}/>
                     </div>
                     <div>
-                        <Experience/>
+                        <Experience onValueChange={onStatChange} initCharacterData={charactersStats}/>
                     </div>
                 </div>
             </div>
